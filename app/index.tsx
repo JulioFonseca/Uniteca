@@ -1,11 +1,9 @@
 import { Stack } from 'expo-router';
-
-import { Welcome } from '@/templates/Welcome';
-import LoginScreen from '@/screens/LoginScreen';
+import Login from './login';
 
 const Home = () => (
   <>
-    <LoginScreen />
+    <Login />
   </>
 );
 

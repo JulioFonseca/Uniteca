@@ -16,15 +16,15 @@ export default function Login() {
   };
 
   return (
-    <View className="flex-1 bg-blue-900 justify-center px-8">
+    <View className="flex-1 bg-[#003867] justify-center px-8">
       {/* Logo */}
-      <View className="items-center mb-10">
+      <View className="items-center mb-2">
         <Image
-          source={require('../assets/library-logo.png')} // coloque seu logo em assets/logo.png
-          className="w-32 h-32"
+          source={require('../assets/logo-uniteca.png')} // coloque seu logo em assets/logo.png
+          className="w-64 h-64"
           resizeMode="contain"
         />
-        <Text className="text-white text-2xl font-bold mt-4">Bem-vindo ao Uniteca</Text>
+      {/*<Text className="text-white text-2xl font-bold mt-4">Bem-vindo ao Unitecaa</Text>*/}
       </View>
 
       {/* Input usuário */}
