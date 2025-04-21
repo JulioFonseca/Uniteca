@@ -72,7 +72,7 @@ O aplicativo utiliza uma paleta de cores baseada no **azul institucional da Est�
 ## 📦 Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/uniteca.git
+git clone https://github.com/JulioFonseca/uniteca.git
 cd uniteca
 npm install
 npm start
