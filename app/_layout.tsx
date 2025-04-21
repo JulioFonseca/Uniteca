@@ -9,7 +9,7 @@ export default function Layout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: false, // Oculta o header em todas as telas por padrão
+        headerShown: false, 
       }}
     />
   );
