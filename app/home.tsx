@@ -65,6 +65,21 @@ export default function Home() {
             ➕ Cadastrar novo material
           </Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push('/aluguelDevolucao')}
+          className="mt-8 flex-row items-center justify-between rounded-2xl bg-white p-4"
+        >
+          <View>
+            <Text className="text-lg font-bold text-[#003867]">
+              Alugar ou Devolver
+            </Text>
+            <Text className="text-sm text-gray-500">
+              Escaneie o QR Code do material
+            </Text>
+          </View>
+          <Ionicons name="scan" size={28} color="#003867" />
+        </TouchableOpacity>
       </ScrollView>
 
       {/* Tab bar fixa com ícones e destaque do ativo */}

@@ -1,9 +1,10 @@
-import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import {
   Alert,
   Image,
+  Modal,
+  Pressable,
   ScrollView,
   Text,
   TextInput,
@@ -19,6 +20,7 @@ export default function CadastroMaterial() {
   const [autor, setAutor] = useState('');
   const [categoria, setCategoria] = useState('Livro');
   const [imagemUri, setImagemUri] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const categorias = ['Livro', 'Apostila', 'Revista', 'Artigo', 'Outro'];
 
@@ -28,7 +30,6 @@ export default function CadastroMaterial() {
       return;
     }
 
-    // Simulação de envio
     Alert.alert('Sucesso', 'Material cadastrado com sucesso!');
     setTitulo('');
     setAutor('');
@@ -80,52 +81,82 @@ export default function CadastroMaterial() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-[#003867] px-6 pt-16">
-      <Text className="mb-6 text-2xl font-bold text-white">
-        Cadastrar Material
+    <ScrollView className="flex-1 bg-[#003867] px-6 pb-10 pt-16">
+      <Text className="mb-8 text-center text-3xl font-bold text-white">
+        Cadastro de Material
       </Text>
-
-      <Text className="mb-2 text-white">Título</Text>
+      <Text className="mb-2 text-sm text-white">Título</Text>
       <TextInput
-        className="mb-4 rounded-xl bg-white px-4 py-3"
+        className="mb-4 rounded-2xl bg-white px-4 py-3 text-base"
         placeholder="Digite o título"
         value={titulo}
         onChangeText={setTitulo}
       />
 
-      <Text className="mb-2 text-white">Autor</Text>
+      <Text className="mb-2 text-sm text-white">Autor</Text>
       <TextInput
-        className="mb-4 rounded-xl bg-white px-4 py-3"
+        className="mb-4 rounded-2xl bg-white px-4 py-3 text-base"
         placeholder="Digite o autor"
         value={autor}
         onChangeText={setAutor}
       />
 
-      <Text className="mb-2 text-white">Categoria</Text>
-      <View className="mb-6 rounded-xl bg-white">
-        <Picker
-          selectedValue={categoria}
-          onValueChange={(itemValue) => setCategoria(itemValue)}
-        >
-          {categorias.map((cat) => (
-            <Picker.Item label={cat} value={cat} key={cat} />
-          ))}
-        </Picker>
-      </View>
+      <Text className="mb-2 text-sm text-white">Categoria</Text>
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        className="mb-6 rounded-2xl bg-white px-4 py-3"
+      >
+        <Text className="text-base text-gray-700">{categoria}</Text>
+      </TouchableOpacity>
 
-      <Text className="mb-2 text-white">Imagem do Material</Text>
-      {imagemUri && (
+      {/* Modal de Categorias */}
+      <Modal transparent animationType="slide" visible={modalVisible}>
+        <View className="flex-1 justify-end bg-black/40">
+          <View className="rounded-t-2xl bg-white p-6">
+            <Text className="mb-4 text-center text-lg font-bold">
+              Escolha a Categoria
+            </Text>
+            {categorias.map((cat) => (
+              <Pressable
+                key={cat}
+                onPress={() => {
+                  setCategoria(cat);
+                  setModalVisible(false);
+                }}
+                className="border-b border-gray-200 py-3"
+              >
+                <Text className="text-center text-base">{cat}</Text>
+              </Pressable>
+            ))}
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              className="mt-4"
+            >
+              <Text className="text-center text-base font-semibold text-blue-600">
+                Cancelar
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Text className="mb-2 text-sm text-white">Imagem do Material</Text>
+      {imagemUri ? (
         <Image
           source={{ uri: imagemUri }}
-          className="mb-4 h-56 w-full rounded-xl"
+          className="mb-4 h-60 w-full rounded-2xl shadow-md"
           resizeMode="cover"
         />
+      ) : (
+        <View className="mb-4 flex h-60 items-center justify-center rounded-2xl border border-dashed border-white bg-white/10">
+          <Text className="text-sm text-white">Nenhuma imagem selecionada</Text>
+        </View>
       )}
 
       <View className="mb-6 flex-row justify-between">
         <TouchableOpacity
           onPress={tirarFoto}
-          className="mr-2 flex-1 rounded-xl bg-blue-700 px-4 py-3"
+          className="mr-2 flex-1 rounded-xl bg-blue-600 px-4 py-3"
         >
           <Text className="text-center font-semibold text-white">
             Tirar Foto
@@ -133,17 +164,17 @@ export default function CadastroMaterial() {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={escolherDaGaleria}
-          className="ml-2 flex-1 rounded-xl bg-blue-500 px-4 py-3"
+          className="ml-2 flex-1 rounded-xl bg-blue-400 px-4 py-3"
         >
           <Text className="text-center font-semibold text-white">Galeria</Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity
-        className="rounded-xl bg-green-600 py-4"
+        className="rounded-2xl bg-green-600 py-4"
         onPress={handleCadastro}
       >
-        <Text className="text-center text-base font-semibold text-white">
+        <Text className="text-center text-base font-bold text-white">
           Cadastrar Material
         </Text>
       </TouchableOpacity>
