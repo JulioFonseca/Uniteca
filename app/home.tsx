@@ -1,50 +1,74 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'materiais' | 'devolucoes' | 'perfil'>('materiais');
+  const [activeTab, setActiveTab] = useState<
+    'materiais' | 'devolucoes' | 'perfil'
+  >('materiais');
+  const router = useRouter();
 
   return (
     <View className="flex-1 bg-[#003867] pt-16">
       {/* Conteúdo Scrollável */}
-      <ScrollView className="px-6 mb-28">
+      <ScrollView className="mb-28 px-6">
         <View className="mb-6">
-          <Text className="text-white text-3xl font-bold">Olá, Julio! 👋</Text>
-          <Text className="text-white text-lg mt-1">Você está na biblioteca Uniteca</Text>
+          <Text className="text-3xl font-bold text-white">Olá, Julio! 👋</Text>
+          <Text className="mt-1 text-lg text-white">
+            Você está na biblioteca Uniteca
+          </Text>
         </View>
 
-        <View className="bg-white rounded-xl px-4 py-3 mb-6">
+        <View className="mb-6 rounded-xl bg-white px-4 py-3">
           <Text className="text-gray-400">🔍 Buscar por título ou autor</Text>
         </View>
 
-        <Text className="text-white text-xl font-semibold mb-3">Recomendações</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-6">
+        <Text className="mb-3 text-xl font-semibold text-white">
+          Recomendações
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mb-6"
+        >
           {[1, 2, 3].map((item) => (
             <View
               key={item}
-              className="w-32 h-48 bg-blue-500 mr-4 rounded-lg justify-end p-2"
+              className="mr-4 h-48 w-32 justify-end rounded-lg bg-blue-500 p-2"
             >
-              <Text className="text-white font-bold">Livro {item}</Text>
+              <Text className="font-bold text-white">Livro {item}</Text>
             </View>
           ))}
         </ScrollView>
 
-        <Text className="text-white text-xl font-semibold mb-3">Mais vendidos</Text>
+        <Text className="mb-3 text-xl font-semibold text-white">
+          Mais vendidos
+        </Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {[1, 2, 3].map((item) => (
             <View
               key={item}
-              className="w-32 h-48 bg-blue-700 mr-4 rounded-lg justify-end p-2"
+              className="mr-4 h-48 w-32 justify-end rounded-lg bg-blue-700 p-2"
             >
-              <Text className="text-white font-bold">Popular {item}</Text>
+              <Text className="font-bold text-white">Popular {item}</Text>
             </View>
           ))}
         </ScrollView>
+
+        {/* Botão de Cadastrar Material */}
+        <TouchableOpacity
+          onPress={() => router.push('/cadastroMaterial')}
+          className="mt-6 rounded-xl bg-white p-4"
+        >
+          <Text className="text-center text-base font-bold text-[#003867]">
+            ➕ Cadastrar novo material
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
 
       {/* Tab bar fixa com ícones e destaque do ativo */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white py-3 px-4 flex-row justify-between items-center rounded-t-3xl shadow-lg">
+      <View className="absolute inset-x-0 bottom-0 flex-row items-center justify-between rounded-t-3xl bg-white px-4 py-3 shadow-lg">
         <TouchableOpacity
           onPress={() => setActiveTab('materiais')}
           className="flex-1 items-center"
@@ -54,7 +78,13 @@ export default function Home() {
             size={24}
             color={activeTab === 'materiais' ? '#003867' : '#888'}
           />
-          <Text className={`text-sm mt-1 ${activeTab === 'materiais' ? 'text-[#003867] font-bold' : 'text-gray-500'}`}>
+          <Text
+            className={`mt-1 text-sm ${
+              activeTab === 'materiais'
+                ? 'font-bold text-[#003867]'
+                : 'text-gray-500'
+            }`}
+          >
             Materiais
           </Text>
         </TouchableOpacity>
@@ -68,7 +98,13 @@ export default function Home() {
             size={24}
             color={activeTab === 'devolucoes' ? '#003867' : '#888'}
           />
-          <Text className={`text-sm mt-1 ${activeTab === 'devolucoes' ? 'text-[#003867] font-bold' : 'text-gray-500'}`}>
+          <Text
+            className={`mt-1 text-sm ${
+              activeTab === 'devolucoes'
+                ? 'font-bold text-[#003867]'
+                : 'text-gray-500'
+            }`}
+          >
             Devoluções
           </Text>
         </TouchableOpacity>
@@ -82,7 +118,13 @@ export default function Home() {
             size={24}
             color={activeTab === 'perfil' ? '#003867' : '#888'}
           />
-          <Text className={`text-sm mt-1 ${activeTab === 'perfil' ? 'text-[#003867] font-bold' : 'text-gray-500'}`}>
+          <Text
+            className={`mt-1 text-sm ${
+              activeTab === 'perfil'
+                ? 'font-bold text-[#003867]'
+                : 'text-gray-500'
+            }`}
+          >
             Perfil
           </Text>
         </TouchableOpacity>

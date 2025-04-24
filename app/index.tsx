@@ -1,10 +1,6 @@
-import { Stack } from 'expo-router';
+// import { Stack } from 'expo-router';
 import Login from './login';
 
-const Home = () => (
-  <>
-    <Login />
-  </>
-);
+const Home = () => <Login />;
 
 export default Home;
