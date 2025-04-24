@@ -33,12 +33,22 @@ export default function Home() {
           className="mb-6"
         >
           {[1, 2, 3].map((item) => (
-            <View
+            <TouchableOpacity
               key={item}
               className="mr-4 h-48 w-32 justify-end rounded-lg bg-blue-500 p-2"
+              onPress={() =>
+                router.push({
+                  pathname: '/detalhesMaterial',
+                  params: {
+                    titulo: `Livro ${item}`,
+                    autor: `Autor ${item}`,
+                    categoria: 'Livro',
+                  },
+                })
+              }
             >
               <Text className="font-bold text-white">Livro {item}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
 
@@ -47,12 +57,22 @@ export default function Home() {
         </Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {[1, 2, 3].map((item) => (
-            <View
+            <TouchableOpacity
               key={item}
-              className="mr-4 h-48 w-32 justify-end rounded-lg bg-blue-700 p-2"
+              className="mr-4 h-48 w-32 justify-end rounded-lg bg-blue-500 p-2"
+              onPress={() =>
+                router.push({
+                  pathname: '/detalhesMaterial',
+                  params: {
+                    titulo: `Livro ${item}`,
+                    autor: `Autor ${item}`,
+                    categoria: 'Livro',
+                  },
+                })
+              }
             >
-              <Text className="font-bold text-white">Popular {item}</Text>
-            </View>
+              <Text className="font-bold text-white">Livro {item}</Text>
+            </TouchableOpacity>
           ))}
         </ScrollView>
 
