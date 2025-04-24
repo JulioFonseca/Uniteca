@@ -87,7 +87,7 @@ export default function CadastroMaterial() {
       </Text>
       <Text className="mb-2 text-sm text-white">Título</Text>
       <TextInput
-        className="mb-4 rounded-2xl bg-white px-4 py-3 text-base"
+        className="mb-4 rounded-xl bg-white px-4 py-3 text-base"
         placeholder="Digite o título"
         value={titulo}
         onChangeText={setTitulo}
@@ -95,7 +95,7 @@ export default function CadastroMaterial() {
 
       <Text className="mb-2 text-sm text-white">Autor</Text>
       <TextInput
-        className="mb-4 rounded-2xl bg-white px-4 py-3 text-base"
+        className="mb-4 rounded-xl bg-white px-4 py-3 text-base"
         placeholder="Digite o autor"
         value={autor}
         onChangeText={setAutor}
@@ -104,7 +104,7 @@ export default function CadastroMaterial() {
       <Text className="mb-2 text-sm text-white">Categoria</Text>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
-        className="mb-6 rounded-2xl bg-white px-4 py-3"
+        className="mb-6 rounded-xl bg-white px-4 py-3"
       >
         <Text className="text-base text-gray-700">{categoria}</Text>
       </TouchableOpacity>
@@ -112,7 +112,7 @@ export default function CadastroMaterial() {
       {/* Modal de Categorias */}
       <Modal transparent animationType="slide" visible={modalVisible}>
         <View className="flex-1 justify-end bg-black/40">
-          <View className="rounded-t-2xl bg-white p-6">
+          <View className="rounded-t-xl bg-white p-6">
             <Text className="mb-4 text-center text-lg font-bold">
               Escolha a Categoria
             </Text>
@@ -148,7 +148,7 @@ export default function CadastroMaterial() {
           resizeMode="cover"
         />
       ) : (
-        <View className="mb-4 flex h-60 items-center justify-center rounded-2xl border border-dashed border-white bg-white/10">
+        <View className="mb-4 flex h-60 items-center justify-center rounded-xl border border-dashed border-white bg-white/10">
           <Text className="text-sm text-white">Nenhuma imagem selecionada</Text>
         </View>
       )}
@@ -171,7 +171,7 @@ export default function CadastroMaterial() {
       </View>
 
       <TouchableOpacity
-        className="rounded-2xl bg-green-600 py-4"
+        className="rounded-xl bg-green-600 py-4"
         onPress={handleCadastro}
       >
         <Text className="text-center text-base font-bold text-white">
