@@ -1,17 +1,39 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../src/services/firebaseConfig'; // Ajuste o caminho conforme necessário
+
+//const auth = getAuth(auth); // Obtenha a instância de auth a partir do seu app Firebase
+
 
 export default function Login() {
-  const [username, setUsername] = useState('');
+  // Renomeado de 'username' para 'email' para melhor clareza com autenticação Firebase
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = () => {
-    if (username === 'admin' && password === '1234') {
-      router.replace('/home'); // navega para a Home
-    } else {
-      Alert.alert('Erro de login', 'Usuário ou senha incorretos.');
+  const handleLogin = async () => {
+    // Validação básica para garantir que os campos não estão vazios
+    if (!email || !password) {
+      Alert.alert('Erro de login', 'Por favor, preencha e-mail e senha.');
+      return;
+    }
+
+    try {
+      // Tenta fazer login com e-mail e senha usando Firebase Authentication
+      await signInWithEmailAndPassword(auth, email, password);
+      // Se o login for bem-sucedido, navega para a Home
+      router.replace('/home');
+    } catch (error) {
+      // Se ocorrer um erro, exibe um alerta com a mensagem de erro do Firebase
+      //console.error("Erro de login do Firebase:", error.message);
+      let errorMessage = 'Ocorreu um erro ao fazer login. Tente novamente.';
+
+      // Mensagens de erro comuns do Firebase (você pode adicionar mais conforme necessário)
+    
+
+      Alert.alert('Erro de login', errorMessage);
     }
   };
 
@@ -26,13 +48,16 @@ export default function Login() {
         />
       </View>
 
-      {/* Input usuário */}
-      <Text className="text-white mb-1 ml-1">Usuário</Text>
+      {/* Input e-mail */}
+      {/* Alterado o label e placeholder para refletir que é e-mail */}
+      <Text className="text-white mb-1 ml-1">E-mail</Text>
       <TextInput
         className="bg-white rounded-lg p-3 mb-4"
-        placeholder="Digite seu usuário"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Digite seu e-mail"
+        value={email}
+        onChangeText={setEmail} // Atualiza o estado 'email'
+        keyboardType="email-address" // Sugere teclado de e-mail
+        autoCapitalize="none" // Desativa capitalização automática
       />
 
       {/* Input senha */}
