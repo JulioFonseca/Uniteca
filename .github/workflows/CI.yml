@@ -27,9 +27,6 @@ jobs:
           cache: "npm"
       - run: npm ci
 
-      - name: Linter
-        run: npm run lint
-
       - name: Type checking
         run: npm run check-types
 

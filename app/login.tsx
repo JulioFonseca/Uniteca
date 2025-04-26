@@ -20,11 +20,10 @@ export default function Login() {
       {/* Logo */}
       <View className="items-center mb-2">
         <Image
-          source={require('../assets/logo-uniteca.png')} // coloque seu logo em assets/logo.png
+          source={require('../assets/logo-uniteca.png')}
           className="w-64 h-64"
           resizeMode="contain"
         />
-      {/*<Text className="text-white text-2xl font-bold mt-4">Bem-vindo ao Unitecaa</Text>*/}
       </View>
 
       {/* Input usuário */}
@@ -52,6 +51,14 @@ export default function Login() {
         className="bg-blue-600 rounded-lg py-3 items-center"
       >
         <Text className="text-white text-base font-semibold">Entrar</Text>
+      </TouchableOpacity>
+
+      {/* Link para cadastro */}
+      <TouchableOpacity
+        onPress={() => router.push('/cadastroUsuario')}
+        className="mt-4 items-center"
+      >
+        <Text className="text-white underline">Não tem conta? Cadastre-se</Text>
       </TouchableOpacity>
     </View>
   );
