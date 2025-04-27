@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../src/services/firebaseConfig'; // Certifique-se que o caminho está certo
+import { auth } from '../src/services/firebaseConfig'; 
 
 export default function Login() {
   const [email, setEmail] = useState('');

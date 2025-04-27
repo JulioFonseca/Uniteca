@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -7,44 +7,79 @@ import {
   View,
   Image,
   TextInput,
+  Alert,
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { auth, db } from '../src/services/firebaseConfig'; 
+import { signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<
-    "materiais" | "devolucoes" | "perfil"
-  >("materiais");
+  const [activeTab, setActiveTab] = useState<"materiais" | "Mapa" | "perfil">("materiais");
   const router = useRouter();
+  const [nome, setNome] = useState('');
+  const [faculdade, setFaculdade] = useState('');
+  const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
+  const [editando, setEditando] = useState(false);
 
-    const [nome, setNome] = useState('Julio Cezar');
-    const [faculdade, setFaculdade] = useState('Estacio');
-    const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
-    const [editando, setEditando] = useState(false);
-  
-    const livrosEmprestados = [
-      { titulo: 'Clean Code', autor: 'Robert C. Martin' },
-      { titulo: 'React Native em Ação', autor: 'Nader Dabit' },
-    ];
-  
-    const escolherFoto = async () => {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.5,
-      });
-  
-      if (!result.canceled) {
-        if (result.assets && result.assets[0]?.uri) {
-          setFotoPerfil(result.assets[0].uri);
-        }
+  const user = auth.currentUser;
+
+  const livrosEmprestados = [
+    { titulo: 'Clean Code', autor: 'Robert C. Martin' },
+    { titulo: 'React Native em Ação', autor: 'Nader Dabit' },
+  ];
+
+  const escolherFoto = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      if (result.assets && result.assets[0]?.uri) {
+        setFotoPerfil(result.assets[0].uri);
       }
-    };
-  
-    const salvarEdicao = () => {
-      setEditando(false);
-    };
+    }
+  };
+
+  const salvarEdicao = () => {
+    setEditando(false);
+  };
+
+  const buscarDadosUsuario = async () => {
+    if (user) {
+      try {
+        const docRef = doc(db, "usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const dados = docSnap.data();
+          setNome(dados.nome || "Usuário");
+          setFaculdade(dados.faculdade || "Faculdade");
+        } else {
+          console.log("Nenhum dado encontrado para este usuário!");
+        }
+      } catch (error) {
+        console.log("Erro ao buscar usuário:", error);
+      }
+    }
+  };
+
+  const fazerLogout = async () => {
+    try {
+      await signOut(auth);
+      router.replace("/login"); // ou como estiver sua página de login
+    } catch (error) {
+      Alert.alert("Erro ao sair", (error as Error).message);
+    }
+  };
+
+  useEffect(() => {
+    buscarDadosUsuario();
+  }, []);
 
   const renderContent = () => {
     if (activeTab === "materiais") {
@@ -52,7 +87,7 @@ export default function Home() {
         <ScrollView className="mb-28 px-6">
           <View className="mb-6">
             <Text className="text-3xl font-bold text-white">
-              Olá, Julio! 👋
+              Olá, {nome}! 👋
             </Text>
             <Text className="mt-1 text-lg text-white">
               Você está na biblioteca Uniteca
@@ -206,6 +241,12 @@ export default function Home() {
 
   return (
     <View className="flex-1 bg-[#003867] pt-16">
+
+            {/* Botão de logout */}
+            <TouchableOpacity onPress={fazerLogout} className="absolute top-8 right-6 z-50">
+        <Ionicons name="log-out-outline" size={28} color="white" />
+      </TouchableOpacity>
+      
       {renderContent()}
 
       {/* Tab bar fixa */}
@@ -231,22 +272,22 @@ export default function Home() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setActiveTab("devolucoes")}
+          onPress={() => setActiveTab("Mapa")}
           className="flex-1 items-center"
         >
           <Ionicons
-            name="refresh"
+            name="map"
             size={24}
-            color={activeTab === "devolucoes" ? "#003867" : "#888"}
+            color={activeTab === "Mapa" ? "#003867" : "#888"}
           />
           <Text
             className={`mt-1 text-sm ${
-              activeTab === "devolucoes"
+              activeTab === "Mapa"
                 ? "font-bold text-[#003867]"
                 : "text-gray-500"
             }`}
           >
-            Devoluções
+            Mapa
           </Text>
         </TouchableOpacity>
 
