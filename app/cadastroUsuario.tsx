@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../src/services/firebaseConfig'; 
+import { db, auth } from '../src/services/firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function CadastroUsuario() {
   const [nome, setNome] = useState('');
@@ -21,20 +22,30 @@ export default function CadastroUsuario() {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
-
+  
     if (!validarEmail(email)) {
       Alert.alert('Erro', 'Por favor, insira um e-mail válido.');
       return;
     }
-
+  
     try {
-      await createUserWithEmailAndPassword(auth, email, senha);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const { uid } = userCredential.user;
+  
+      // Salvar dados no Firestore
+      await setDoc(doc(db, 'usuarios', uid), {
+        nome,
+        email,
+        faculdade,
+        criadoEm: new Date(),
+      });
+  
       Alert.alert('Cadastro realizado', 'Sua conta foi criada com sucesso!');
       router.replace('/login');
     } catch (error: any) {
       console.error('Erro ao cadastrar:', error);
       let mensagem = 'Erro ao cadastrar. Tente novamente.';
-      
+  
       if (error.code === 'auth/email-already-in-use') {
         mensagem = 'Este e-mail já está em uso.';
       } else if (error.code === 'auth/invalid-email') {
@@ -42,10 +53,11 @@ export default function CadastroUsuario() {
       } else if (error.code === 'auth/weak-password') {
         mensagem = 'A senha precisa ter pelo menos 6 caracteres.';
       }
-      
+  
       Alert.alert('Erro', mensagem);
     }
   };
+  
 
   return (
     <KeyboardAvoidingView

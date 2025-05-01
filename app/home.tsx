@@ -11,9 +11,11 @@ import {
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { auth, db } from '../src/services/firebaseConfig'; 
+import { db, auth } from '../src/services/firebaseConfig';
 import { signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import * as FileSystem from 'expo-file-system'; // Se estiver usando Expo
+
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"materiais" | "Mapa" | "perfil">("materiais");
@@ -36,11 +38,16 @@ export default function Home() {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.5,
+      base64: true, 
     });
 
     if (!result.canceled) {
       if (result.assets && result.assets[0]?.uri) {
-        setFotoPerfil(result.assets[0].uri);
+        const selectedImageUri = result.assets[0].uri;
+        // Opcional: Ainda pode definir o estado aqui se precisar exibir a imagem antes do upload
+        setFotoPerfil(selectedImageUri);
+        // Chame salvarFotoPerfil passando a URI diretamente
+        await salvarFotoPerfil(selectedImageUri);
       }
     }
   };
@@ -54,11 +61,12 @@ export default function Home() {
       try {
         const docRef = doc(db, "usuarios", user.uid);
         const docSnap = await getDoc(docRef);
-
+  
         if (docSnap.exists()) {
           const dados = docSnap.data();
           setNome(dados.nome || "Usuário");
           setFaculdade(dados.faculdade || "Faculdade");
+          if (dados.fotoPerfil) setFotoPerfil(dados.fotoPerfil); // <- aqui!
         } else {
           console.log("Nenhum dado encontrado para este usuário!");
         }
@@ -66,16 +74,58 @@ export default function Home() {
         console.log("Erro ao buscar usuário:", error);
       }
     }
-  };
+  };  
 
   const fazerLogout = async () => {
     try {
       await signOut(auth);
-      router.replace("/login"); // ou como estiver sua página de login
+      router.replace("/login"); // 
     } catch (error) {
       Alert.alert("Erro ao sair", (error as Error).message);
     }
   };
+
+
+  const salvarFotoPerfil = async (imageUri: string) => {
+    if (!user || !imageUri) return;
+  
+    try {
+      const base64Data = await FileSystem.readAsStringAsync(imageUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+  
+      const fileDataBase64 = `data:image/jpeg;base64,${base64Data}`;
+  
+      const response = await fetch('https://api.cloudinary.com/v1_1/duhhud3ef/image/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          file: fileDataBase64,
+          upload_preset: 'uniteca',
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.secure_url) {
+        const userDoc = doc(db, 'usuarios', user.uid);
+        await updateDoc(userDoc, { fotoPerfil: data.secure_url });
+  
+        Alert.alert('Sucesso', 'Foto de perfil atualizada!');
+      } else {
+        console.error('Erro do Cloudinary:', data);
+        Alert.alert('Erro', data.error?.message || 'Erro ao fazer upload da imagem.');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar imagem para o Cloudinary:', error);
+      Alert.alert('Erro', 'Erro ao enviar imagem. Tente novamente.');
+    }
+  };
+  
+  
+  
 
   useEffect(() => {
     buscarDadosUsuario();
