@@ -77,7 +77,7 @@ npm install
 npm start
 ```
 
-> 💡 Você pode testar o projeto diretamente no [Expo Go](https://expo.dev) ou usando o [Snack](https://snack.expo.dev).
+> 💡 Você pode testar o projeto diretamente no [Expo Go](https://expo.dev).
 
 ---
 

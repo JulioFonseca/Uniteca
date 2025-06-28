@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "uniteca",
+    "slug": "uniteca",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "expo": {
+      "newArchEnabled": false
+    },  
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teczer.uniteca",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Este aplicativo precisa acessar a câmera para escanear QR codes."
+      }
+    },
+    "android": {
+      "edgeToEdgeEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo-uniteca.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.teczer.exponativewindtypescriptboilerplate"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/logo-uniteca.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-web-browser"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { BarCodeScanner } from 'expo-barcode-scanner';
+//import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,12 +8,12 @@ export default function AluguelDevolucao() {
   const [scanned, setScanned] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //     setHasPermission(status === 'granted');
+  //   })();
+  // }, []);
 
   const handleBarCodeScanned = ({
     type,
@@ -90,10 +90,10 @@ export default function AluguelDevolucao() {
           borderColor: '#fff',
         }}
       >
-        <BarCodeScanner
+        {/* <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={StyleSheet.absoluteFillObject}
-        />
+        /> */}
       </View>
 
       <Text className="mt-4 text-center text-white">

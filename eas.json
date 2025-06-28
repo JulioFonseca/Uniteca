@@ -1,0 +1,9 @@
+{
+    "build": {
+      "ios": {
+        "releaseChannel": "default",
+        "developmentClient": false
+      }
+    }
+  }
+  

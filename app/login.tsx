@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image, KeyboardAvoidingView, ScrollView, Platform, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../src/services/firebaseConfig'; 
+import { auth } from '../services/firebaseConfig';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Estado para controle do carregamento
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -14,6 +15,8 @@ export default function Login() {
       Alert.alert('Erro de login', 'Por favor, preencha e-mail e senha.');
       return;
     }
+
+    setIsLoading(true); // Ativa o loading
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -34,57 +37,72 @@ export default function Login() {
       }
 
       Alert.alert('Erro de login', errorMessage);
+    } finally {
+      setIsLoading(false); // Desativa o loading após a tentativa de login
     }
   };
 
   return (
-    <View className="flex-1 bg-[#003867] justify-center px-8">
-      
-      {/* Logo */}
-      <View className="items-center mb-2">
-        <Image
-          source={require('../assets/logo-uniteca.png')}
-          className="w-64 h-64"
-          resizeMode="contain"
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+      className="flex-1" 
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} 
+        className={`bg-[#003867] ${isLoading ? 'px-8' : 'px-8'}`}
+      >
+        {/* Logo */}
+        <View className="items-center mb-2">
+          <Image
+            source={require('../assets/images/logo-uniteca.png')}
+            style={{ width: 256, height: 256 }} 
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Input de e-mail */}
+        <Text className="text-white mb-1 ml-1">E-mail</Text>
+        <TextInput
+          className="bg-white rounded-lg p-3 mb-4"
+          placeholder="Digite seu e-mail"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
-      </View>
 
-      {/* Input de e-mail */}
-      <Text className="text-white mb-1 ml-1">E-mail</Text>
-      <TextInput
-        className="bg-white rounded-lg p-3 mb-4"
-        placeholder="Digite seu e-mail"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        {/* Input de senha */}
+        <Text className="text-white mb-1 ml-1">Senha</Text>
+        <TextInput
+          className="bg-white rounded-lg p-3 mb-6"
+          placeholder="Digite sua senha"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      {/* Input de senha */}
-      <Text className="text-white mb-1 ml-1">Senha</Text>
-      <TextInput
-        className="bg-white rounded-lg p-3 mb-6"
-        placeholder="Digite sua senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        {/* Botão de login */}
+        <TouchableOpacity
+          onPress={handleLogin}
+          className="bg-blue-600 rounded-lg py-3 items-center"
+        >
+          <Text className="text-white text-base font-semibold">Entrar</Text>
+        </TouchableOpacity>
 
-      {/* Botão de login */}
-      <TouchableOpacity
-        onPress={handleLogin}
-        className="bg-blue-600 rounded-lg py-3 items-center"
-      >
-        <Text className="text-white text-base font-semibold">Entrar</Text>
-      </TouchableOpacity>
+        {/* Link para cadastro */}
+        <TouchableOpacity
+          onPress={() => router.push('/cadastroUsuario')}
+          className="mt-4 items-center"
+        >
+          <Text className="text-white underline">Não tem conta? Cadastre-se</Text>
+        </TouchableOpacity>
 
-      {/* Link para cadastro */}
-      <TouchableOpacity
-        onPress={() => router.push('/cadastroUsuario')}
-        className="mt-4 items-center"
-      >
-        <Text className="text-white underline">Não tem conta? Cadastre-se</Text>
-      </TouchableOpacity>
-    </View>
+         {isLoading && (
+          <View className='z-40 absolute top-0 left-0 right-0 bottom-0 justify-center item-center'>
+            <ActivityIndicator size={'large'} color={'#FFFFFF'} />
+          </View>
+        )} 
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
