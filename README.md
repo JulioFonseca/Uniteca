@@ -9,8 +9,7 @@ Uniteca é um aplicativo moderno e intuitivo de **gestão de biblioteca universi
 
 - 📖 Cadastro de materiais (livros, apostilas, etc.)
 - 📲 Aluguel e devolução com scanner de código de barras / QR Code
-- 🔔 Notificações push para lembrar prazos de devolução
-- 👤 Autenticação de usuários (alunos, administradores)
+- 👤 Autenticação de usuários (alunos)
 - 🧾 Histórico de empréstimos
 - 🏷️ Sistema de categorias e filtros de busca
 
@@ -84,7 +83,7 @@ npm start
 
 ## 📌 Status do Projeto
 
-🚧 Em desenvolvimento — protótipo funcional em progresso.
+🚧 Finalizado — protótipo funcional em progresso.
 
 ---
 
